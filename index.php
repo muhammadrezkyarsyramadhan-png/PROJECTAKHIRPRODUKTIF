@@ -10,17 +10,17 @@ class User
         $this->noHp = $noHp;
     }
 
-
     public function getNama()
     {
         return $this->nama;
     }
+    
     public function getStatus()
     {
         return "Status user";
     }
 
-     public function getNoHP() {
+    public function getNoHP() {
         return $this->noHp;
     }
 }
@@ -44,6 +44,7 @@ class Pelanggan extends User
         return $this->poin;
     }
 }
+
 class Layanan
 {
     public $jenisLayanan;
@@ -65,6 +66,7 @@ class Layanan
         }
     }
 }
+
 class Voucher
 {
     public $kodeVoucher;
@@ -75,11 +77,11 @@ class Voucher
         $this->kodeVoucher = $kodeVoucher;
 
         if ($kodeVoucher == "HEMAT10") {
-            $this->diskonPersen = 0.10;
+            $this->diskonPersen = 10;
         } else if ($kodeVoucher == "HEMAT20") {
-            $this->diskonPersen = 0.20;
+            $this->diskonPersen = 20;
         } else if ($kodeVoucher == "HEMAT30") {
-            $this->diskonPersen = 0.30;
+            $this->diskonPersen = 30;
         } else {
             $this->diskonPersen = 0;
         }
@@ -99,7 +101,7 @@ class Pembayaran
         $this->metode = $metode;
     }
 
-    public function getMetode() {
+    public function getBiayaAdmin() {
         return 0;
     }
 }
@@ -107,7 +109,7 @@ class Pembayaran
 class Ewallet extends Pembayaran
 {
     #[Override]
-    public function getMetode()
+    public function getBiayaAdmin()
     {
         return 1000;
     }
@@ -116,7 +118,7 @@ class Ewallet extends Pembayaran
 class Transferbank extends Pembayaran
 {
     #[Override]
-    public function getMetode()
+    public function getBiayaAdmin()
     {
         return 2500;
     }
@@ -125,7 +127,7 @@ class Transferbank extends Pembayaran
 class Cash extends Pembayaran
 {
     #[Override]
-    public function getMetode()
+    public function getBiayaAdmin()
     {
         return 0;
     }
@@ -187,6 +189,8 @@ $cetakPembayaran = "";
 $cetakVoucher = "";
 $cetakTotal = 0;
 $cetakPoin = 0;
+$pesanError = "";
+$tampilkanHasil = false;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $namaInput = $_POST['nama'];
@@ -208,9 +212,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $voucherBaru = new Voucher($voucherInput);
 
         if ($pembayaranInput == "eWallet") {
-            $pembayaranBaru = new EWallet($pembayaranInput);
+            $pembayaranBaru = new Ewallet($pembayaranInput);
         } elseif ($pembayaranInput == "Transfer Bank") {
-            $pembayaranBaru = new TransferBank($pembayaranInput);
+            $pembayaranBaru = new Transferbank($pembayaranInput);
         } else {
             $pembayaranBaru = new Cash($pembayaranInput);
         }
